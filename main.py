@@ -89,7 +89,10 @@ class OperationFactory:
             "divide": Division(),
         }
         logging.debug(f"Creating operation for: {operation}")
-        return operations_map.get(operation.lower())
+        operation_obj = operations_map.get(operation.lower())
+        if not operation_obj:
+            logging.error(f"Unknown operation: {operation}")
+        return operation_obj
 
 
 class HistoryObserver:
@@ -143,25 +146,35 @@ class CalculatorWithObserver:
         return operation.calculate(a, b)
 
     def save_history(self):
-        history_data = [
-            {"Operation": str(calc.operation.__class__.__name__), "Operand1": calc.operand1, "Operand2": calc.operand2, "Result": calc.operation.calculate(calc.operand1, calc.operand2)}
-            for calc in self._history
-        ]
-        df = pd.DataFrame(history_data)
-        df.to_csv(self.history_file, index=False)
-        logging.info(f"History saved to {self.history_file}")
+        try:
+            history_data = [
+                {"Operation": str(calc.operation.__class__.__name__), "Operand1": calc.operand1, "Operand2": calc.operand2, "Result": calc.operation.calculate(calc.operand1, calc.operand2)}
+                for calc in self._history
+            ]
+            df = pd.DataFrame(history_data)
+            df.to_csv(self.history_file, index=False)
+            logging.info(f"History saved to {self.history_file}")
+        except Exception as e:
+            logging.error(f"Error saving history: {e}")
 
     def load_history(self):
-        if os.path.exists(self.history_file):
-            df = pd.read_csv(self.history_file)
-            history = [
-                Calculation(OperationFactory.create_operation(row["Operation"].lower()), row["Operand1"], row["Operand2"])
-                for index, row in df.iterrows()
-            ]
-            logging.info(f"Loaded history from {self.history_file}")
-            return history
-        else:
-            logging.info("No history file found. Starting fresh.")
+        try:
+            if os.path.exists(self.history_file):
+                df = pd.read_csv(self.history_file)
+                if 'Operation' not in df.columns or 'Operand1' not in df.columns or 'Operand2' not in df.columns:
+                    logging.error("CSV file missing required columns")
+                    return []
+                history = [
+                    Calculation(OperationFactory.create_operation(row["Operation"].lower()), row["Operand1"], row["Operand2"])
+                    for index, row in df.iterrows()
+                ]
+                logging.info(f"Loaded history from {self.history_file}")
+                return history
+            else:
+                logging.info("No history file found. Starting fresh.")
+                return []
+        except Exception as e:
+            logging.error(f"Error loading history: {e}")
             return []
 
     def get_history(self):
@@ -240,19 +253,30 @@ def calculator():
             continue
 
         try:
+            # Splitting input, making sure we handle spaces
             operation_str, num1_str, num2_str = user_input.split()
+
+            # Convert numbers to float
             num1, num2 = float(num1_str), float(num2_str)
+
+            # Try to create the operation object
             operation = OperationFactory.create_operation(operation_str)
 
             if operation:
+                # Perform the operation and print the result
                 result = calc.perform_operation(operation, num1, num2)
                 print(f"Result: {result}")
             else:
                 print(f"Unknown operation '{operation_str}'. Type 'help' for available commands.")
 
         except ValueError as e:
+            # Handle invalid inputs gracefully
             logging.error(f"Invalid input or error: {e}")
             print("Invalid input. Please enter a valid operation and two numbers. Type 'help' for instructions.")
+        except Exception as e:
+            # Handle any other errors
+            logging.error(f"Unexpected error: {e}")
+            print("An unexpected error occurred.")
 
 
 if __name__ == "__main__":
