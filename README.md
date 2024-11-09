@@ -1,15 +1,15 @@
 # Building a Calculator with Logging/Debugging/Pandas (Midterm)
-*
+
 ---
 
 This midterm requires the development of an advanced Python-based calculator application. Designed to underscore the importance of professional software development practices, the application integrates clean, maintainable code, the application of design patterns, comprehensive logging, dynamic configuration via environment variables, sophisticated data handling with Pandas, and a command-line interface (REPL) for real-time user interaction.
 
-→ Command Pattern
-→ Template Method Pattern
-→ Factory Pattern
-→ Observer Pattern
-→ Singleton Pattern
-→ Strategy Pattern
+- Command Pattern
+- Template Method Pattern
+- Factory Pattern
+- Observer Pattern
+- Singleton Pattern
+- Strategy Pattern
 ---
 ## Table of Contents
 
@@ -552,14 +552,14 @@ In this guide, we've built a calculator application that demonstrates several fu
 
 # Quick Reference Guide
 
-→ **Add**: `add <num1> <num2>`
-→ **Subtract**: `subtract <num1> <num2>`
-→ **Multiply**: `multiply <num1> <num2>`
-→ **Divide**: `divide <num1> <num2>`
-→ **View History**: `list`
-→ **Clear History**: `clear`
-→ **Exit Program**: `exit`
-→ **Help**: `help`
+- **Add**: `add <num1> <num2>`
+- **Subtract**: `subtract <num1> <num2>`
+- **Multiply**: `multiply <num1> <num2>`
+- **Divide**: `divide <num1> <num2>`
+- **View History**: `list`
+- **Clear History**: `clear`
+- **Exit Program**: `exit`
+ **Help**: `help`
 
 ---
 
