@@ -16,21 +16,13 @@ This midterm requires the development of an advanced Python-based calculator app
 1. [Introduction](#introduction)
 2. [Setup Logging](#setup-logging)
 3. [Operation Classes (Command and Template Method Patterns)](#operation-classes)
-   - [Abstract Base Class: `TemplateOperation`](#templateoperation)
-   - [Concrete Operation Classes](#concrete-operation-classes)
 4. [Factory Pattern for Creating Operations](#factory-pattern)
-   - [Class: `OperationFactory`](#operationfactory)
 5. [Observer Pattern for Tracking History](#observer-pattern)
-   - [Class: `HistoryObserver`](#historyobserver)
-   - [Class: `CalculatorWithObserver`](#calculatorwithobserver)
 6. [Singleton Pattern for Ensuring One Calculator Instance](#singleton-pattern)
-   - [Class: `SingletonCalculator`](#singletoncalculator)
 7. [Strategy Pattern for Operation Selection](#strategy-pattern)
-   - [Class: `Calculation`](#calculation)
 8. [Main Calculator Program (REPL Interface with Debugging)](#main-calculator-program)
-   - [Function: `calculator()`](#calculator-function)
 9. [Summary of Design Patterns and Techniques Used](#summary)
-10. [Conclusion](#conclusion)
+10. [Conclusion](#conclusion)   
 
 ---
 
@@ -39,6 +31,17 @@ This midterm requires the development of an advanced Python-based calculator app
 In this guide, we'll build a calculator application that performs basic arithmetic operations: addition, subtraction, multiplication, and division. Along the way, we'll implement several OOP design patterns to make our code modular, reusable, and easy to maintain.
 
 We'll also set up logging to keep track of events and use Python's built-in debugger (`pdb`) to help us troubleshoot any issues that arise.
+
+---
+
+---
+
+## Installation <a name="installation"></a>
+
+Requirements: Python 3.8 or higher & PIP
+
+- Clone the repository
+- Install dependences using [pip install -r requirements.txt]
 
 ---
 
@@ -115,65 +118,6 @@ class TemplateOperation(ABC):
   2. **Execute**: Performs the specific mathematical operation.
   3. **Log Result**: Logs the operation and its result.
 - **Abstract Method**: The `execute` method is abstract, meaning each subclass must provide its own implementation.
-
-### Concrete Operation Classes <a name="concrete-operation-classes"></a>
-
-We now create concrete classes for each arithmetic operation, inheriting from `TemplateOperation` and implementing the `execute` method.
-
-#### Addition
-
-```python
-class Addition(TemplateOperation):
-    """Class to represent the addition operation."""
-
-    def execute(self, a: float, b: float) -> float:
-        """Return the sum of two numbers."""
-        return a + b
-```
-
-#### Subtraction
-
-```python
-class Subtraction(TemplateOperation):
-    """Class to represent the subtraction operation."""
-
-    def execute(self, a: float, b: float) -> float:
-        """Return the difference between two numbers."""
-        return a - b
-```
-
-#### Multiplication
-
-```python
-class Multiplication(TemplateOperation):
-    """Class to represent the multiplication operation."""
-
-    def execute(self, a: float, b: float) -> float:
-        """Return the product of two numbers."""
-        return a * b
-```
-
-#### Division
-
-```python
-class Division(TemplateOperation):
-    """Class to represent the division operation."""
-
-    def execute(self, a: float, b: float) -> float:
-        """Return the quotient of two numbers. Raise an error if dividing by zero."""
-        if b == 0:
-            logging.error("Attempted to divide by zero.")
-            raise ValueError("Division by zero is not allowed.")
-        return a / b
-```
-
-#### Key Points:
-
-- Each operation class implements the `execute` method to perform its specific operation.
-- The `Division` class includes an additional check for division by zero, logging an error and raising an exception if necessary.
-- By inheriting from `TemplateOperation`, each subclass follows the same template for calculation, ensuring consistency.
-
----
 
 ## Factory Pattern for Creating Operations <a name="factory-pattern"></a>
 
@@ -525,12 +469,12 @@ def calculator():
 - **Purpose**: Ensures a class has only one instance and provides a global point of access to it.
 - **Implementation**: `SingletonCalculator` ensures only one instance exists, sharing history across the application.
 
-### Logging
+### 7. Logging
 
 - **Purpose**: Record events for debugging and monitoring.
 - **Implementation**: Used extensively throughout the application to log operations, errors, and other significant events.
 
-### Debugging
+### 8. Debugging
 
 - **Purpose**: Identify and fix issues in the code.
 - **Implementation**: Utilized `pdb.set_trace()` to set breakpoints and inspect the state of the program.
@@ -539,7 +483,13 @@ def calculator():
 
 ## Conclusion <a name="conclusion"></a>
 
-In this guide, we've built a calculator application that demonstrates several fundamental OOP design patterns. By incorporating these patterns, we've created a flexible, maintainable, and scalable application.
+- In this repository there are many functionalities that are core to this assignment.
+- **Command-Line Interface (REPL)**
+- **Plugin System**
+- **Calculation History Management with Pandas**
+- **Professional Logging Practices**
+- **Advanced Data Handling with Pandas**
+- **Design Patterns for Scalable Architecture**
 
 ### Benefits of Using Design Patterns:
 
@@ -559,7 +509,7 @@ In this guide, we've built a calculator application that demonstrates several fu
 - **View History**: `list`
 - **Clear History**: `clear`
 - **Exit Program**: `exit`
- **Help**: `help`
+- **Help**: `help`
 
 ---
 

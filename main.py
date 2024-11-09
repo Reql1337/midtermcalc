@@ -1,27 +1,13 @@
-# Ultimate Guide to OOP Design Patterns: Building a Calculator with Logging and Debugging
 
 # ==============================================================================
 # IMPORTING NECESSARY MODULES
 # ==============================================================================
+import logging
+import pdb
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import List 
 
-import logging  # Standard Python module for logging events and messages.
-# Documentation: https://docs.python.org/3/library/logging.html
-
-import pdb  # Python debugger for interactive debugging sessions.
-# Documentation: https://docs.python.org/3/library/pdb.html
-
-from abc import ABC, abstractmethod  # For creating abstract base classes (ABCs).
-# Documentation: https://docs.python.org/3/library/abc.html
-
-from dataclasses import dataclass  # Provides a decorator and functions for automatically adding special methods to classes.
-# Documentation: https://docs.python.org/3/library/dataclasses.html
-
-from typing import List  # Provides support for type hints.
-# Documentation: https://docs.python.org/3/library/typing.html
-
-# ==============================================================================
-# SETUP LOGGING CONFIGURATION
-# ==============================================================================
 
 # Configure the logging settings for the application.
 # Logging is crucial for tracking events and diagnosing issues in applications.
@@ -34,21 +20,6 @@ logging.basicConfig(
     # %(levelname)s - Severity level of the log message.
     # %(message)s - The actual log message.
 )
-
-# ==============================================================================
-# OPERATION CLASSES (COMMAND AND TEMPLATE METHOD PATTERNS)
-# ==============================================================================
-
-# Who: These classes are the core components that perform arithmetic operations.
-# What: Implement arithmetic operations using design patterns.
-# Why: To demonstrate OOP principles and design patterns for clean, maintainable code.
-# Where: In the calculator application we are building.
-# When: Whenever an arithmetic operation is requested.
-# How: By defining a base class and extending it for specific operations.
-
-# We will implement the Command Pattern, where each operation (e.g., addition, subtraction)
-# is encapsulated as an object. The Template Method Pattern is used to define the
-# skeleton of an algorithm, deferring some steps to subclasses.
 
 class TemplateOperation(ABC):
     """
@@ -92,8 +63,6 @@ class TemplateOperation(ABC):
         """
         logging.info(f"Operation performed: {a} and {b} -> Result: {result}")  # Log an informational message.
 
-# Concrete operation classes implementing specific arithmetic operations.
-# Each class represents a specific operation and extends the TemplateOperation base class.
 
 class Addition(TemplateOperation):
     """
@@ -143,21 +112,6 @@ class Division(TemplateOperation):
             raise ValueError("Division by zero is not allowed.")  # Raise an exception.
         return a / b  # Perform division.
 
-# Why use the Template Method Pattern here?
-# - It defines the algorithm's skeleton in a method (`calculate`), deferring some steps (`execute`) to subclasses.
-# - Promotes code reuse and enforces a consistent structure across different operations.
-
-# ==============================================================================
-# FACTORY PATTERN FOR CREATING OPERATIONS
-# ==============================================================================
-
-# Who: The OperationFactory class.
-# What: Creates instances of operation classes based on a given operation name.
-# Why: To encapsulate object creation, promoting loose coupling and adherence to the Open/Closed Principle.
-# Where: Used whenever a new operation needs to be created based on user input.
-# When: At runtime, during the calculator's execution.
-# How: By mapping operation names to their corresponding classes.
-
 class OperationFactory:
     """
     Factory class to create instances of operations based on the operation type.
@@ -181,22 +135,6 @@ class OperationFactory:
         logging.debug(f"Creating operation for: {operation}")
         # Retrieve the operation instance from the map.
         return operations_map.get(operation.lower())  # Returns None if the key is not found.
-
-# Why use the Factory Pattern?
-# - It provides a way to create objects without specifying the exact class.
-# - Enhances flexibility and scalability; new operations can be added without modifying existing code.
-
-# ==============================================================================
-# OBSERVER PATTERN FOR TRACKING HISTORY
-# ==============================================================================
-
-# Who: The HistoryObserver and CalculatorWithObserver classes.
-# What: Allows observers to be notified of changes in the calculation history.
-# Why: To promote loose coupling between the calculator and observers, adhering to the Observer Pattern.
-# Where: In the calculator's history management.
-# When: Whenever a new calculation is performed.
-# How: Observers register themselves with the calculator and are notified upon updates.
-
 class HistoryObserver:
     """
     Observer that gets notified whenever a new calculation is added to history.
@@ -254,22 +192,6 @@ class CalculatorWithObserver:
         self.notify_observers(calculation)  # Notify observers of the new calculation.
         logging.debug(f"Performed operation: {calculation}")  # Log the operation.
         return operation.calculate(a, b)  # Execute the calculation and return the result.
-
-# Why use the Observer Pattern?
-# - Decouples the calculator from the observers, allowing for dynamic addition/removal of observers.
-# - Promotes a one-to-many dependency between objects, so when one object changes state, all dependents are notified.
-
-# ==============================================================================
-# SINGLETON PATTERN FOR ENSURING ONE CALCULATOR INSTANCE
-# ==============================================================================
-
-# Who: The SingletonCalculator class.
-# What: Ensures only one instance of the calculator exists.
-# Why: To have a single shared state (e.g., calculation history) across the application.
-# Where: In scenarios where shared resources are needed.
-# When: Throughout the application's lifecycle.
-# How: By controlling instance creation using the __new__ method.
-
 class SingletonCalculator:
     """
     A calculator using the Singleton pattern to ensure only one instance exists.
@@ -310,20 +232,6 @@ class SingletonCalculator:
        # pdb.set_trace()  # Pause execution here for debugging.
         return self._history  # Return the shared history list.
 
-# Why use the Singleton Pattern?
-# - To control access to a shared resource.
-# - Ensures that there's only one point of interaction with the resource.
-
-# ==============================================================================
-# STRATEGY PATTERN FOR OPERATION SELECTION
-# ==============================================================================
-
-# Who: The Calculation class.
-# What: Represents a calculation using a specific strategy (operation).
-# Why: To encapsulate algorithms (operations) and make them interchangeable.
-# Where: In the execution of calculations.
-# When: When performing operations on operands.
-# How: By holding a reference to a strategy object and executing it.
 
 @dataclass  # Decorator to automatically generate special methods like __init__.
 class Calculation:
@@ -349,20 +257,6 @@ class Calculation:
         result = self.operation.calculate(self.operand1, self.operand2)  # Perform the calculation.
         return f"{self.operand1} {self.operation.__class__.__name__.lower()} {self.operand2} = {result}"
 
-# Why use the Strategy Pattern?
-# - Allows the algorithm (operation) to vary independently from the clients that use it.
-# - Promotes flexibility and reuse of algorithms.
-
-# ==============================================================================
-# MAIN CALCULATOR PROGRAM (REPL INTERFACE WITH DEBUGGING)
-# ==============================================================================
-
-# Who: The calculator() function.
-# What: Provides an interactive command-line interface for users to perform calculations.
-# Why: To allow users to interact with the calculator in real-time.
-# Where: In the main execution of the program.
-# When: When the script is run directly.
-# How: By implementing a Read-Eval-Print Loop (REPL).
 
 def calculator():
     """
@@ -449,47 +343,9 @@ def calculator():
             logging.error(f"Invalid input or error: {e}")  # Log the error.
             print("Invalid input. Please enter a valid operation and two numbers. Type 'help' for instructions.")
 
-# Why use a REPL?
-# - Provides an interactive way for users to execute commands and see immediate results.
-# - Enhances user experience and allows for real-time feedback.
 
-# ==============================================================================
-# RUNNING THE CALCULATOR PROGRAM
-# ==============================================================================
 
 if __name__ == "__main__":
     # This block ensures that the calculator runs only when the script is executed directly.
     # It will not run if the script is imported as a module.
     calculator()  # Call the main calculator function to start the REPL.
-
-# General Programming Good Practices Demonstrated:
-# - **Modular Design**: The code is organized into classes and functions, making it easier to understand and maintain.
-# - **Encapsulation**: Data and methods are encapsulated within classes, promoting data hiding and abstraction.
-# - **Inheritance and Polymorphism**: Base classes define common interfaces, and derived classes implement specific behaviors.
-# - **Exception Handling**: The code anticipates and handles potential errors gracefully, providing informative feedback.
-# - **Logging**: Comprehensive logging is implemented to track the application's behavior and assist in debugging.
-# - **Type Hinting**: Type hints improve code readability and help with static analysis tools.
-# - **Documentation and Comments**: Detailed comments and docstrings explain the purpose and functionality of code components.
-# - **Adherence to PEP 8**: The code follows Python's style guidelines for improved readability.
-
-# Additional Resources and References:
-# - **Abstract Base Classes (`abc` module)**:
-#   - Reference: https://docs.python.org/3/library/abc.html
-# - **Data Classes (`dataclasses` module)**:
-#   - Reference: https://docs.python.org/3/library/dataclasses.html
-# - **Type Hints (`typing` module)**:
-#   - Reference: https://docs.python.org/3/library/typing.html
-# - **Logging (`logging` module)**:
-#   - Reference: https://docs.python.org/3/library/logging.html
-# - **Python Debugger (`pdb` module)**:
-#   - Reference: https://docs.python.org/3/library/pdb.html
-# - **Design Patterns in Python**:
-#   - Reference: https://refactoring.guru/design-patterns/python
-# - **PEP 8 - Style Guide for Python Code**:
-#   - Reference: https://www.python.org/dev/peps/pep-0008/
-
-# Conclusion:
-# This code serves as a comprehensive example of how to implement several key object-oriented design patterns in Python.
-# By understanding the who, what, why, where, when, and how of each component, students can gain a deeper appreciation
-# for the art and science of OOP. The combination of design patterns, logging, debugging, and good programming practices
-# results in code that is robust, maintainable, and scalable.
