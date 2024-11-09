@@ -4,11 +4,17 @@ import pandas as pd
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List
-
+from dotenv import load_dotenv  # Importing dotenv to read environment variables
 
 # ============================================================================== #
 # CONFIGURATION AND LOGGING
 # ============================================================================== #
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Read the history file path from the environment variable
+history_file = os.getenv("HISTORY_FILE", "calculator_history.csv")  # Default to 'calculator_history.csv' if not set
 
 logging.basicConfig(
     filename='calculator.log',  # Log to a file
@@ -114,7 +120,7 @@ class CalculatorWithObserver:
     Calculator class with observer support for tracking calculation history and CSV persistence.
     """
 
-    def __init__(self, history_file="calculator_history.csv"):
+    def __init__(self, history_file=history_file):
         self.history_file = history_file
         self._history: List[Calculation] = self.load_history()
         self._observers: List[HistoryObserver] = []
@@ -161,6 +167,20 @@ class CalculatorWithObserver:
     def get_history(self):
         return self._history
 
+    def load_history_manually(self):
+        """
+        Manually load history from the CSV file.
+        """
+        logging.info(f"Loading history manually from {self.history_file}...")
+        return self.load_history()
+
+    def save_history_manually(self):
+        """
+        Manually save the current history to the CSV file.
+        """
+        logging.info(f"Saving history manually to {self.history_file}...")
+        self.save_history()
+
 
 # ============================================================================== #
 # REPL INTERFACE
@@ -185,6 +205,8 @@ def calculator():
             print("  divide <num1> <num2>    : Divide the first number by the second.")
             print("  list                    : Show the calculation history.")
             print("  clear                   : Clear the calculation history.")
+            print("  save_history            : Save the history manually.")
+            print("  load_history            : Load the history manually.")
             print("  exit                    : Exit the calculator.\n")
             continue
 
@@ -205,6 +227,16 @@ def calculator():
             calc.save_history()
             logging.info("History cleared.")
             print("History cleared.")
+            continue
+
+        if user_input.lower() == "save_history":
+            calc.save_history_manually()
+            print(f"History manually saved to {calc.history_file}")
+            continue
+
+        if user_input.lower() == "load_history":
+            calc.load_history_manually()
+            print(f"History manually loaded from {calc.history_file}")
             continue
 
         try:

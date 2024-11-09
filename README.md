@@ -1,16 +1,6 @@
 # Building a Calculator with Logging/Debugging/Pandas (Midterm)
 
 ---
-
-This midterm requires the development of an advanced Python-based calculator application. Designed to underscore the importance of professional software development practices, the application integrates clean, maintainable code, the application of design patterns, comprehensive logging, dynamic configuration via environment variables, sophisticated data handling with Pandas, and a command-line interface (REPL) for real-time user interaction.
-
-- Command Pattern
-- Template Method Pattern
-- Factory Pattern
-- Observer Pattern
-- Singleton Pattern
-- Strategy Pattern
----
 ## Table of Contents
 
 1. [Introduction](#introduction)
@@ -21,18 +11,7 @@ This midterm requires the development of an advanced Python-based calculator app
 6. [Singleton Pattern for Ensuring One Calculator Instance](#singleton-pattern)
 7. [Strategy Pattern for Operation Selection](#strategy-pattern)
 8. [Main Calculator Program (REPL Interface with Debugging)](#main-calculator-program)
-9. [Summary of Design Patterns and Techniques Used](#summary)
-10. [Conclusion](#conclusion)   
-
----
-
-## Introduction <a name="introduction"></a>
-
-In this guide, we'll build a calculator application that performs basic arithmetic operations: addition, subtraction, multiplication, and division. Along the way, we'll implement several OOP design patterns to make our code modular, reusable, and easy to maintain.
-
-We'll also set up logging to keep track of events and use Python's built-in debugger (`pdb`) to help us troubleshoot any issues that arise.
-
----
+9. [Conclusion](#conclusion)   
 
 ---
 
@@ -118,6 +97,8 @@ class TemplateOperation(ABC):
   2. **Execute**: Performs the specific mathematical operation.
   3. **Log Result**: Logs the operation and its result.
 - **Abstract Method**: The `execute` method is abstract, meaning each subclass must provide its own implementation.
+- **Purpose**: Defines the skeleton of an algorithm in a method, deferring some steps to subclasses.
+- **Implementation**: `TemplateOperation` class provides a template for operation execution.
 
 ## Factory Pattern for Creating Operations <a name="factory-pattern"></a>
 
@@ -180,6 +161,8 @@ class HistoryObserver:
 
 - **Observer**: Listens for updates from the subject (calculator history).
 - **Update Method**: Called when a new calculation is added.
+- **Purpose:** Allows an object to notify other objects when its state changes.
+- **Implementation:** CalculatorWithObserver notifies HistoryObserver when a new calculation is added.
 
 ### Class: `CalculatorWithObserver` <a name="calculatorwithobserver"></a>
 
@@ -434,50 +417,6 @@ def calculator():
   exit
   Exiting calculator...
   ```
-
----
-
-## Summary of Design Patterns and Techniques Used <a name="summary"></a>
-
-### 1. Factory Pattern
-
-- **Purpose**: To create objects without specifying the exact class of the object that will be created.
-- **Implementation**: `OperationFactory` creates operation instances based on a string input.
-
-### 2. Command Pattern
-
-- **Purpose**: Encapsulate a request as an object, thereby allowing for parameterization and queuing of requests.
-- **Implementation**: Each operation class acts as a command that can be executed.
-
-### 3. Strategy Pattern
-
-- **Purpose**: Enables selecting an algorithm at runtime.
-- **Implementation**: The `Calculation` class uses different operation strategies interchangeably.
-
-### 4. Template Method Pattern
-
-- **Purpose**: Defines the skeleton of an algorithm in a method, deferring some steps to subclasses.
-- **Implementation**: `TemplateOperation` class provides a template for operation execution.
-
-### 5. Observer Pattern
-
-- **Purpose**: Allows an object to notify other objects when its state changes.
-- **Implementation**: `CalculatorWithObserver` notifies `HistoryObserver` when a new calculation is added.
-
-### 6. Singleton Pattern
-
-- **Purpose**: Ensures a class has only one instance and provides a global point of access to it.
-- **Implementation**: `SingletonCalculator` ensures only one instance exists, sharing history across the application.
-
-### 7. Logging
-
-- **Purpose**: Record events for debugging and monitoring.
-- **Implementation**: Used extensively throughout the application to log operations, errors, and other significant events.
-
-### 8. Debugging
-
-- **Purpose**: Identify and fix issues in the code.
-- **Implementation**: Utilized `pdb.set_trace()` to set breakpoints and inspect the state of the program.
 
 ---
 
