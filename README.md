@@ -3,6 +3,8 @@
 ---
 ## Table of Contents
 
+- VIDEO LINK: https://youtu.be/jhgqio3BLe8
+
 1. [Introduction](#introduction)
 2. [Setup Logging](#setup-logging)
 3. [Operation Classes (Command and Template Method Patterns)](#operation-classes)
